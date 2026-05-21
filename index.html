@@ -1474,14 +1474,38 @@ footer {
             }
 
             document.getElementById('dlFilename').textContent = filename;
-            document.getElementById('btnDl').onclick = () => {
-              // trigger download with correct filename via <a> trick
-              const a = document.createElement('a');
-              a.href = payload.downloadUrl;
-              a.download = filename;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
+            document.getElementById('btnDl').onclick = async () => {
+              const btn = document.getElementById('btnDl');
+              const originalText = document.getElementById('dlFilename').textContent;
+              document.getElementById('dlFilename').textContent = '[ TÉLÉCHARGEMENT... ]';
+              btn.style.opacity = '0.6';
+              btn.style.pointerEvents = 'none';
+              try {
+                // Fetch as blob to force the filename we want (cross-origin <a download> is ignored by browsers)
+                const resp = await fetch(payload.downloadUrl);
+                const blob = await resp.blob();
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+              } catch (_) {
+                // Fallback: direct link if blob fetch fails (e.g. CORS)
+                const a = document.createElement('a');
+                a.href = payload.downloadUrl;
+                a.download = filename;
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+              } finally {
+                document.getElementById('dlFilename').textContent = originalText;
+                btn.style.opacity = '';
+                btn.style.pointerEvents = '';
+              }
             };
             document.getElementById('dlPanel').classList.add('show');
             document.getElementById('adAfterDownload').style.display = 'block';
