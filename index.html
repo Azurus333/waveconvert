@@ -1,384 +1,904 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WAVE⚡CONVERT</title>
-    <style>
-        :root {
-            --bg-dark: #0a0a0f;
-            --bg-darker: #050508;
-            --accent: #00ff88;
-            --text: #e0e0e0;
-            --text-dim: #888;
-            --border: #333;
-            --glow: 0 0 20px rgba(0, 255, 136, 0.3);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAVECONVERT — Audio & Video Converter</title>
+<meta name="description" content="Télécharge et convertis n'importe quelle vidéo YouTube, SoundCloud, Spotify, Twitch en MP3, WAV, OGG ou M4A.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #070a0d;
+  --bg2:      #0c1117;
+  --bg3:      #111820;
+  --border:   #1a2d1f;
+  --border2:  #0f2318;
+  --accent:   #00ff9d;
+  --accent2:  #00c97a;
+  --accent3:  #ff003c;
+  --dim:      rgba(0,255,157,0.55);
+  --text:     #c8fce0;
+  --muted:    #2d6644;
+  --mono:     'Share Tech Mono', monospace;
+  --head:     'Rajdhani', sans-serif;
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+* { margin:0; padding:0; box-sizing:border-box; }
 
-        body {
-            font-family: 'Courier New', monospace;
-            background: var(--bg-dark);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+body {
+  font-family: var(--head);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
 
-        /* Scanlines overlay */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                to bottom,
-                rgba(0, 0, 0, 0.1),
-                rgba(0, 0, 0, 0.1) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.3;
-        }
+/* Scanlines */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 999;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            position: relative;
-            z-index: 1;
-        }
+/* Grid bg */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,255,157,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,157,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
 
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-            animation: glitch 2s infinite;
-        }
+/* Glitch animation */
+@keyframes glitch {
+  0%,94%,100% { transform: none; text-shadow: 0 0 10px var(--accent); }
+  95% { transform: translate(-2px, 1px); text-shadow: 2px 0 var(--accent3), -2px 0 cyan; }
+  97% { transform: translate(2px, -1px); text-shadow: -2px 0 var(--accent3), 2px 0 cyan; }
+}
 
-        @keyframes glitch {
-            0%, 90%, 100% { transform: translate(0); }
-            92% { transform: translate(-2px, 2px); }
-            94% { transform: translate(2px, -2px); }
-            96% { transform: translate(-2px, -2px); }
-            98% { transform: translate(2px, 2px); }
-        }
+@keyframes blink {
+  0%,100% { opacity: 1; } 50% { opacity: 0; }
+}
 
-        h1 {
-            font-size: 3rem;
-            color: var(--accent);
-            text-shadow: var(--glow);
-            letter-spacing: 0.3em;
-            margin-bottom: 0.5rem;
-        }
+@keyframes scanIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: none; }
+}
 
-        .subtitle {
-            color: var(--text-dim);
-            font-size: 1rem;
-            letter-spacing: 0.2em;
-        }
+@keyframes pulse-border {
+  0%,100% { border-color: var(--border); }
+  50%      { border-color: var(--accent2); }
+}
 
-        .input-group {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 20px 60px;
+}
 
-        input[type="url"] {
-            flex: 1;
-            min-width: 250px;
-            padding: 1rem;
-            background: var(--bg-darker);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-family: inherit;
-            font-size: 1rem;
-            border-radius: 4px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
+/* TOP BAR */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  margin-bottom: 40px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.topbar-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dot-live {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: blink 2s infinite;
+}
 
-        input[type="url"]:focus {
-            border-color: var(--accent);
-            box-shadow: var(--glow);
-        }
+/* LOGO */
+.logo-block {
+  margin-bottom: 36px;
+}
 
-        select {
-            padding: 1rem;
-            background: var(--bg-darker);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-family: inherit;
-            font-size: 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            outline: none;
-        }
+.logo-prefix {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  margin-bottom: 4px;
+}
 
-        select:focus {
-            border-color: var(--accent);
-        }
+.logo {
+  font-family: var(--head);
+  font-size: 52px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -1px;
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(0,255,157,0.4);
+  animation: glitch 8s infinite;
+}
 
-        button {
-            padding: 1rem 2rem;
-            background: transparent;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            font-family: inherit;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
+.logo .slash { color: var(--accent3); }
+.logo .cursor {
+  display: inline-block;
+  width: 4px;
+  background: var(--accent);
+  height: 0.8em;
+  vertical-align: middle;
+  margin-left: 4px;
+  animation: blink 1s step-end infinite;
+}
 
-        button:hover {
-            background: var(--accent);
-            color: var(--bg-dark);
-            box-shadow: var(--glow);
-        }
+.logo-sub {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  margin-top: 8px;
+}
 
-        button:active {
-            transform: scale(0.98);
-        }
+/* PLATFORMS */
+.platforms-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  margin-bottom: 10px;
+}
 
-        .status {
-            margin-top: 2rem;
-            padding: 1rem;
-            background: var(--bg-darker);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            min-height: 50px;
-            font-family: monospace;
-            white-space: pre-wrap;
-            color: var(--accent);
-            overflow-y: auto;
-            max-height: 200px;
-        }
+.platforms {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
 
-        .progress-container {
-            margin-top: 1rem;
-            width: 100%;
-            height: 4px;
-            background: var(--bg-darker);
-            border-radius: 2px;
-            overflow: hidden;
-        }
+.plat {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 4px 10px;
+  letter-spacing: 0.08em;
+  background: var(--bg2);
+  transition: all 0.15s;
+}
+.plat:hover { color: var(--accent); border-color: var(--accent); }
+.plat.yt  { color: #ff4444; border-color: rgba(255,68,68,0.3); }
+.plat.sc  { color: #ff6600; border-color: rgba(255,102,0,0.3); }
+.plat.sp  { color: #1ed760; border-color: rgba(30,215,96,0.3); }
+.plat.tw  { color: #9147ff; border-color: rgba(145,71,255,0.3); }
+.plat.vm  { color: #19b7ea; border-color: rgba(25,183,234,0.3); }
+.plat.dm  { color: #0066dc; border-color: rgba(0,102,220,0.3); }
 
-        .progress-bar {
-            height: 100%;
-            background: var(--accent);
-            width: 0%;
-            transition: width 0.3s;
-            box-shadow: var(--glow);
-        }
+/* MAIN PANEL */
+.panel {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--bg2);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
 
-        .preview {
-            margin-top: 2rem;
-            display: none;
-            flex-direction: column;
-            gap: 1rem;
-            align-items: center;
-            text-align: center;
-        }
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  background: var(--bg3);
+}
+.panel-header::before {
+  content: '//';
+  color: var(--accent);
+  font-weight: 700;
+}
 
-        .preview img {
-            max-width: 300px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            box-shadow: var(--glow);
-        }
+.panel-body { padding: 20px; }
 
-        .preview h3 {
-            color: var(--text);
-            font-size: 1.2rem;
-        }
+/* Input */
+.input-wrap {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+}
 
-        .preview p {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-        }
+.url-input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-right: none;
+  border-radius: 2px 0 0 2px;
+  padding: 13px 16px;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+  caret-color: var(--accent);
+}
+.url-input:focus { border-color: var(--accent2); }
+.url-input::placeholder { color: var(--muted); }
 
-        footer {
-            text-align: center;
-            margin-top: 3rem;
-            color: var(--text-dim);
-            font-size: 0.8rem;
-        }
+.btn-paste {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 0 2px 2px 0;
+  padding: 13px 16px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.btn-paste:hover { color: var(--accent); border-color: var(--accent2); background: var(--bg2); }
 
-        @media (max-width: 600px) {
-            .input-group {
-                flex-direction: column;
-            }
-            input[type="url"] {
-                width: 100%;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-        }
-    </style>
+/* Preview */
+.preview {
+  display: none;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  animation: scanIn 0.25s ease;
+  border-left: 3px solid var(--accent);
+}
+.preview.show { display: flex; }
+.preview-thumb {
+  width: 80px; height: 50px;
+  object-fit: cover;
+  border-radius: 1px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  filter: saturate(0.8) contrast(1.1);
+}
+.preview-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.preview-meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 5px;
+  letter-spacing: 0.05em;
+}
+
+/* Format */
+.row-formats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.fmt-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  margin-right: 4px;
+}
+.fmt {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 7px 16px;
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  transition: all 0.15s;
+  user-select: none;
+}
+.fmt:hover { color: var(--text); border-color: #2a4a35; }
+.fmt.active {
+  background: rgba(0,255,157,0.07);
+  border-color: var(--accent);
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(0,255,157,0.5);
+}
+
+/* Convert button */
+.btn-convert {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  padding: 16px;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-shadow: 0 0 10px rgba(0,255,157,0.4);
+  box-shadow: 0 0 20px rgba(0,255,157,0.05), inset 0 0 20px rgba(0,255,157,0.03);
+  position: relative;
+  overflow: hidden;
+}
+.btn-convert::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0,255,157,0.06), transparent);
+  transition: left 0.4s;
+}
+.btn-convert:hover::before { left: 100%; }
+.btn-convert:hover {
+  background: rgba(0,255,157,0.07);
+  box-shadow: 0 0 30px rgba(0,255,157,0.15), inset 0 0 30px rgba(0,255,157,0.05);
+}
+.btn-convert:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* PROGRESS PANEL */
+.progress-panel {
+  display: none;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  background: var(--bg2);
+  overflow: hidden;
+  margin-bottom: 16px;
+  animation: scanIn 0.3s ease;
+}
+.progress-panel.show { display: block; }
+
+.progress-log {
+  padding: 16px 20px;
+  font-family: var(--mono);
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 120px;
+}
+
+.log-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+}
+.log-line.active { opacity: 1; }
+.log-line.done { opacity: 0.6; color: var(--accent2); }
+
+.log-prompt {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.log-line.done .log-prompt { color: var(--accent2); }
+.log-line.done::before {
+  content: none;
+}
+
+.log-text { color: var(--text); line-height: 1.4; }
+.log-line.active .log-text::after {
+  content: '_';
+  animation: blink 0.8s step-end infinite;
+  color: var(--accent);
+}
+
+/* Bar */
+.bar-wrap {
+  border-top: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.bar-track {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.bar-pct {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  width: 36px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* DOWNLOAD */
+.dl-panel {
+  display: none;
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  background: var(--bg2);
+  animation: scanIn 0.3s ease;
+  margin-bottom: 16px;
+  box-shadow: 0 0 30px rgba(0,255,157,0.08);
+}
+.dl-panel.show { display: block; }
+
+.dl-header {
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(0,255,157,0.15);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  background: rgba(0,255,157,0.04);
+}
+
+.btn-dl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  color: var(--accent);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.btn-dl:hover { background: rgba(0,255,157,0.06); }
+.dl-arrow { font-size: 18px; }
+
+/* ERROR */
+.err-panel {
+  display: none;
+  border: 1px solid rgba(255,0,60,0.4);
+  border-radius: 2px;
+  background: rgba(255,0,60,0.05);
+  padding: 14px 20px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent3);
+  animation: scanIn 0.3s ease;
+  margin-bottom: 16px;
+  border-left: 3px solid var(--accent3);
+  line-height: 1.6;
+}
+.err-panel.show { display: block; }
+
+.btn-reset {
+  display: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.12em;
+  text-decoration: underline;
+  padding: 0;
+  transition: color 0.2s;
+  margin-bottom: 16px;
+}
+.btn-reset:hover { color: var(--accent); }
+.btn-reset.show { display: block; }
+
+/* STATS BAR */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+.stat {
+  padding: 16px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+.stat:last-child { border-right: none; }
+.stat-val {
+  font-family: var(--mono);
+  font-size: 22px;
+  color: var(--accent);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(0,255,157,0.3);
+}
+.stat-key {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 520px) {
+  .logo { font-size: 38px; }
+  .stats { grid-template-columns: repeat(3,1fr); }
+  .stat-val { font-size: 16px; }
+  footer { flex-direction: column; gap: 8px; }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>WAVE⚡CONVERT</h1>
-            <p class="subtitle">CONVERTISSEUR AUDIO ULTRA-RAPIDE</p>
-        </header>
 
-        <div class="input-group">
-            <input type="url" id="urlInput" placeholder="Collez le lien YouTube, SoundCloud, Twitch, etc..." required>
-            <select id="formatSelect">
-                <option value="mp3">MP3</option>
-                <option value="wav">WAV</option>
-                <option value="ogg">OGG</option>
-                <option value="m4a">M4A</option>
-            </select>
-            <button id="convertBtn">CONVERTIR</button>
-        </div>
+<div class="wrap">
 
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-
-        <div class="status" id="status">
-            Prêt à convertir...
-        </div>
-
-        <div class="preview" id="preview">
-            <img id="previewImg" alt="Aperçu" style="max-width: 300px;">
-            <h3 id="previewTitle">Titre de la vidéo</h3>
-            <p id="previewChannel">Chaîne</p>
-        </div>
-
-        <footer>
-            <p>Powered by DePIN Network | Conversion ultra-rapide et sécurisée</p>
-        </footer>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-status">
+      <div class="dot-live"></div>
+      SYSTEM ONLINE // NODE NETWORK ACTIVE
     </div>
+    <div>v2.4.1 // SECURE</div>
+  </div>
 
-    <script>
-        const API = 'https://api-convert.revolution-network.fr';
-        const urlInput = document.getElementById('urlInput');
-        const formatSelect = document.getElementById('formatSelect');
-        const convertBtn = document.getElementById('convertBtn');
-        const statusEl = document.getElementById('status');
-        const progressBar = document.getElementById('progressBar');
-        const preview = document.getElementById('preview');
-        const previewImg = document.getElementById('previewImg');
-        const previewTitle = document.getElementById('previewTitle');
-        const previewChannel = document.getElementById('previewChannel');
+  <!-- LOGO -->
+  <div class="logo-block">
+    <div class="logo-prefix">// AUDIO &amp; VIDEO EXTRACTION TOOL</div>
+    <div class="logo">WAVE<span class="slash">⚡</span>CONVERT<span class="cursor"></span></div>
+    <div class="logo-sub">TÉLÉCHARGE &amp; CONVERTIS DEPUIS N'IMPORTE QUELLE PLATEFORME</div>
+  </div>
 
-        let eventSource = null;
+  <!-- PLATFORMS -->
+  <div class="platforms-label">// PLATEFORMES SUPPORTÉES</div>
+  <div class="platforms">
+    <div class="plat yt">YOUTUBE</div>
+    <div class="plat sc">SOUNDCLOUD</div>
+    <div class="plat sp">SPOTIFY*</div>
+    <div class="plat tw">TWITCH</div>
+    <div class="plat vm">VIMEO</div>
+    <div class="plat dm">DAILYMOTION</div>
+    <div class="plat">TWITTER/X</div>
+    <div class="plat">INSTAGRAM</div>
+    <div class="plat">FACEBOOK</div>
+    <div class="plat">+ 1000 AUTRES</div>
+  </div>
 
-        convertBtn.addEventListener('click', startConversion);
-        urlInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') startConversion();
-        });
+  <!-- INPUT PANEL -->
+  <div class="panel">
+    <div class="panel-header">SOURCE_URL — COLLE LE LIEN CI-DESSOUS</div>
+    <div class="panel-body">
 
-        async function startConversion() {
-            const url = urlInput.value.trim();
-            const format = formatSelect.value;
+      <div class="input-wrap">
+        <input
+          class="url-input"
+          id="urlInput"
+          type="text"
+          placeholder="https://www.youtube.com/watch?v=... ou soundcloud.com/..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button class="btn-paste" id="btnPaste">[ COLLER ]</button>
+      </div>
 
-            if (!url) {
-                statusEl.textContent = '⚠️ Veuillez entrer une URL valide';
-                return;
-            }
+      <div class="preview" id="preview">
+        <img class="preview-thumb" id="previewThumb" src="" alt="">
+        <div>
+          <div class="preview-title" id="previewTitle"></div>
+          <div class="preview-meta" id="previewMeta"></div>
+        </div>
+      </div>
 
-            // Réinitialiser
-            if (eventSource) eventSource.close();
-            progressBar.style.width = '0%';
-            preview.style.display = 'none';
-            statusEl.textContent = '🔍 Vérification de l\'URL...';
+      <div class="row-formats">
+        <span class="fmt-label">OUTPUT_FORMAT //</span>
+        <div class="fmt active" data-fmt="mp3">MP3</div>
+        <div class="fmt" data-fmt="wav">WAV</div>
+        <div class="fmt" data-fmt="ogg">OGG</div>
+        <div class="fmt" data-fmt="m4a">M4A</div>
+      </div>
 
-            try {
-                // Récupérer les infos de la vidéo
-                const infoResp = await fetch(`${API}/api/info`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url })
-                });
+      <button class="btn-convert" id="btnConvert">
+        [ LANCER LA CONVERSION ]
+      </button>
 
-                if (!infoResp.ok) throw new Error('URL invalide');
+    </div>
+  </div>
 
-                const info = await infoResp.json();
-                showPreview(info);
+  <!-- PROGRESS -->
+  <div class="progress-panel" id="progressPanel">
+    <div class="panel-header">PROCESS_LOG — OPÉRATION EN COURS</div>
+    <div class="progress-log" id="progressLog">
+      <div class="log-line" id="s-extract">
+        <span class="log-prompt">$&gt;</span>
+        <span class="log-text">extract_audio_stream --source URL --no-download</span>
+      </div>
+      <div class="log-line" id="s-convert">
+        <span class="log-prompt">$&gt;</span>
+        <span class="log-text">dispatch_job --type audio_convert --network depin</span>
+      </div>
+      <div class="log-line" id="s-processing">
+        <span class="log-prompt">$&gt;</span>
+        <span class="log-text">processing --nodes distributed --queue priority</span>
+      </div>
+      <div class="log-line" id="s-ready">
+        <span class="log-prompt">$&gt;</span>
+        <span class="log-text">sign_output --storage r2 --expires 15min</span>
+      </div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+      <div class="bar-pct" id="barPct">0%</div>
+    </div>
+  </div>
 
-                // Démarrer la conversion
-                statusEl.textContent = '⚡ Conversion en cours...';
-                progressBar.style.width = '10%';
+  <!-- DOWNLOAD -->
+  <div class="dl-panel" id="dlPanel">
+    <div class="dl-header">// OUTPUT_READY — FICHIER DISPONIBLE</div>
+    <a class="btn-dl" id="btnDl" href="#" download>
+      <span id="dlFilename">audio.mp3</span>
+      <span class="dl-arrow">⬇</span>
+    </a>
+  </div>
 
-                eventSource = new EventSource(`${API}/api/convert?url=${encodeURIComponent(url)}&format=${format}`);
+  <!-- ERROR -->
+  <div class="err-panel" id="errPanel"></div>
 
-                eventSource.onmessage = (event) => {
-                    const data = JSON.parse(event.data);
-                    if (data.step === 'extract') {
-                        statusEl.textContent = '🎵 Extraction de l\'audio...';
-                        progressBar.style.width = '25%';
-                    } else if (data.step === 'convert') {
-                        statusEl.textContent = '🔄 Conversion en cours...';
-                        progressBar.style.width = '50%';
-                    } else if (data.step === 'processing') {
-                        statusEl.textContent = data.message || '⏳ Traitement par le réseau...';
-                        progressBar.style.width = '75%';
-                    } else if (data.step === 'ready') {
-                        statusEl.textContent = '✅ Prêt !';
-                        progressBar.style.width = '90%';
-                    }
-                };
+  <!-- RESET -->
+  <button class="btn-reset" id="btnReset">$ cd .. &amp;&amp; reset // ← nouvelle conversion</button>
 
-                eventSource.addEventListener('done', (event) => {
-                    if (event.data) {
-                        const data = JSON.parse(event.data);
-                        progressBar.style.width = '100%';
-                        statusEl.textContent = '✅ Téléchargement prêt !';
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-val">1000+</div>
+      <div class="stat-key">SITES_SUPPORTÉS</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">FREE</div>
+      <div class="stat-key">SANS_INSCRIPTION</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">0</div>
+      <div class="stat-key">DATA_STOCKÉE</div>
+    </div>
+  </div>
 
-                        // ⬇️ CORRECTION : FORCE LE TÉLÉCHARGEMENT
-                        const a = document.createElement('a');
-                        a.href = data.downloadUrl;
-                        a.download = data.filename || `audio.${data.format}`;
-                        a.click();
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 WAVECONVERT // POWERED BY REVOLUTION NETWORK</span>
+    <span>* Spotify : métadonnées seulement</span>
+  </footer>
 
-                        setTimeout(() => {
-                            progressBar.style.width = '0%';
-                            statusEl.textContent = 'Prêt pour une nouvelle conversion !';
-                        }, 3000);
-                    }
-                    if (eventSource) eventSource.close();
-                });
+</div>
 
-                eventSource.addEventListener('error', (event) => {
-                    if (event.data) {
-                        const data = JSON.parse(event.data);
-                        statusEl.textContent = `❌ Erreur : ${data.message || 'Conversion échouée'}`;
-                    } else {
-                        statusEl.textContent = '❌ Erreur de connexion';
-                    }
-                    progressBar.style.width = '0%';
-                    if (eventSource) eventSource.close();
-                });
+<script>
+  // ⚠ REMPLACE PAR TON SOUS-DOMAINE API EN HTTPS
+  const API = 'https://api-convert.revolution-network.fr';
 
-            } catch (error) {
-                statusEl.textContent = `❌ Erreur : ${error.message}`;
-                progressBar.style.width = '0%';
-            }
+  const stepOrder = ['extract', 'convert', 'processing', 'ready'];
+  const barPct    = { extract: 20, convert: 45, processing: 75, ready: 95 };
+  let selectedFormat = 'mp3';
+  let infoTimer = null;
+
+  // Format selector
+  document.querySelectorAll('.fmt').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.fmt').forEach(f => f.classList.remove('active'));
+      el.classList.add('active');
+      selectedFormat = el.dataset.fmt;
+    });
+  });
+
+  // Paste
+  document.getElementById('btnPaste').addEventListener('click', async () => {
+    try {
+      const txt = await navigator.clipboard.readText();
+      document.getElementById('urlInput').value = txt;
+      handleUrl(txt);
+    } catch (_) {}
+  });
+
+  document.getElementById('urlInput').addEventListener('input', e => {
+    clearTimeout(infoTimer);
+    const val = e.target.value.trim();
+    if (/youtube\.com|youtu\.be|soundcloud\.com/.test(val)) {
+      infoTimer = setTimeout(() => fetchInfo(val), 700);
+    } else {
+      hidePreview();
+    }
+  });
+
+  function handleUrl(val) {
+    if (/youtube\.com|youtu\.be|soundcloud\.com/.test(val)) fetchInfo(val);
+    else hidePreview();
+  }
+
+  async function fetchInfo(url) {
+    try {
+      const r = await fetch(`${API}/api/info`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+      if (!r.ok) return hidePreview();
+      const d = await r.json();
+      if (d.title) showPreview(d);
+    } catch (_) { hidePreview(); }
+  }
+
+  function showPreview(d) {
+    document.getElementById('previewThumb').src = d.thumbnail || '';
+    document.getElementById('previewTitle').textContent = d.title;
+    const dur = d.duration ? fmtDur(d.duration) : '';
+    document.getElementById('previewMeta').textContent = [d.channel, dur].filter(Boolean).join(' · ');
+    document.getElementById('preview').classList.add('show');
+  }
+
+  function hidePreview() {
+    document.getElementById('preview').classList.remove('show');
+  }
+
+  function fmtDur(s) {
+    const m = Math.floor(s / 60), sec = s % 60;
+    return `${m}:${String(sec).padStart(2, '0')}`;
+  }
+
+  function setStep(step) {
+    const idx = stepOrder.indexOf(step);
+    const pct = barPct[step] || 0;
+    stepOrder.forEach((s, i) => {
+      const el = document.getElementById('s-' + s);
+      el.classList.remove('active', 'done');
+      if (i < idx) el.classList.add('done');
+      else if (i === idx) el.classList.add('active');
+    });
+    document.getElementById('barFill').style.width = pct + '%';
+    document.getElementById('barPct').textContent = pct + '%';
+  }
+
+  document.getElementById('btnConvert').addEventListener('click', startConvert);
+
+  async function startConvert() {
+    const url = document.getElementById('urlInput').value.trim();
+    if (!url) { document.getElementById('urlInput').focus(); return; }
+
+    // Reset UI
+    document.getElementById('errPanel').classList.remove('show');
+    document.getElementById('dlPanel').classList.remove('show');
+    document.getElementById('btnReset').classList.remove('show');
+    document.getElementById('btnConvert').disabled = true;
+    document.getElementById('btnConvert').textContent = '[ CONVERSION EN COURS... ]';
+    document.getElementById('progressPanel').classList.add('show');
+    document.getElementById('barFill').style.width = '5%';
+    document.getElementById('barPct').textContent = '5%';
+
+    const isYT = /youtube\.com|youtu\.be/.test(url);
+    setStep(isYT ? 'extract' : 'convert');
+
+    try {
+      const resp = await fetch(`${API}/api/convert`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, format: selectedFormat })
+      });
+
+      if (!resp.ok) throw new Error(`SERVER_ERROR :: ${resp.status}`);
+
+      const reader = resp.body.getReader();
+      const dec = new TextDecoder();
+      let buf = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, { stream: true });
+        const parts = buf.split('\n\n');
+        buf = parts.pop();
+        for (const part of parts) {
+          const lines = part.trim().split('\n');
+          let event = '', data = '';
+          for (const line of lines) {
+            if (line.startsWith('event:')) event = line.slice(6).trim();
+            if (line.startsWith('data:'))  data  = line.slice(5).trim();
+          }
+          if (!event || !data) continue;
+          const payload = JSON.parse(data);
+
+          if (event === 'status') {
+            setStep(payload.step);
+          } else if (event === 'done') {
+            document.getElementById('barFill').style.width = '100%';
+            document.getElementById('barPct').textContent = '100%';
+            stepOrder.forEach(s => {
+              document.getElementById('s-'+s).classList.remove('active');
+              document.getElementById('s-'+s).classList.add('done');
+            });
+            const filename = payload.filename || `audio.${selectedFormat}`;
+            document.getElementById('btnDl').href = payload.downloadUrl;
+            document.getElementById('btnDl').download = filename;
+            document.getElementById('dlFilename').textContent = filename;
+            document.getElementById('dlPanel').classList.add('show');
+            document.getElementById('btnReset').classList.add('show');
+            document.getElementById('btnConvert').textContent = '[ LANCER LA CONVERSION ]';
+            document.getElementById('btnConvert').disabled = false;
+          } else if (event === 'error') {
+            throw new Error(payload.message);
+          }
         }
+      }
+    } catch (err) {
+      document.getElementById('errPanel').textContent = 'ERROR :: ' + err.message;
+      document.getElementById('errPanel').classList.add('show');
+      document.getElementById('btnConvert').textContent = '[ LANCER LA CONVERSION ]';
+      document.getElementById('btnConvert').disabled = false;
+      document.getElementById('btnReset').classList.add('show');
+    }
+  }
 
-        function showPreview(info) {
-            previewImg.src = info.thumbnail || 'https://via.placeholder.com/300x169?text=No+Preview';
-            previewTitle.textContent = info.title || 'Titre inconnu';
-            previewChannel.textContent = info.channel || 'Chaîne inconnue';
-            preview.style.display = 'flex';
-        }
-    </script>
+  document.getElementById('btnReset').addEventListener('click', () => {
+    document.getElementById('urlInput').value = '';
+    document.getElementById('progressPanel').classList.remove('show');
+    document.getElementById('dlPanel').classList.remove('show');
+    document.getElementById('errPanel').classList.remove('show');
+    document.getElementById('btnReset').classList.remove('show');
+    document.getElementById('btnConvert').textContent = '[ LANCER LA CONVERSION ]';
+    document.getElementById('btnConvert').disabled = false;
+    document.getElementById('barFill').style.width = '0';
+    document.getElementById('barPct').textContent = '0%';
+    hidePreview();
+    stepOrder.forEach(s => document.getElementById('s-'+s).classList.remove('active','done'));
+  });
+</script>
 </body>
 </html>
