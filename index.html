@@ -22,6 +22,12 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Comment convertir une vidéo YouTube en MP3 ?","acceptedAnswer":{"@type":"Answer","text":"Copiez l'URL de la vidéo YouTube, collez-la dans WaveConvert, choisissez le format MP3 et cliquez sur Convertir. Le téléchargement démarre en quelques secondes."}},{"@type":"Question","name":"WaveConvert est-il gratuit ?","acceptedAnswer":{"@type":"Answer","text":"Oui, WaveConvert est 100% gratuit et sans inscription. Vous pouvez convertir autant de vidéos que vous le souhaitez."}},{"@type":"Question","name":"Quels formats audio sont supportés ?","acceptedAnswer":{"@type":"Answer","text":"WaveConvert supporte MP3, WAV, OGG et M4A. Le MP3 est recommandé pour la compatibilité universelle."}},{"@type":"Question","name":"Est-ce que SoundCloud est supporté ?","acceptedAnswer":{"@type":"Answer","text":"Oui, WaveConvert supporte SoundCloud, YouTube, Twitch, Vimeo, Dailymotion, Twitter/X, Instagram, Facebook et plus de 1000 autres plateformes."}}]}
 </script>
+<!-- ═══════════════════════════════════════════════
+     GOOGLE ADSENSE
+     Remplace ca-pub-6620583007706439 par ton ID éditeur
+     ═══════════════════════════════════════════════ -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6620583007706439" crossorigin="anonymous"></script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -724,6 +730,46 @@ footer {
 @media (max-width: 400px) {
   .seo-grid { grid-template-columns: 1fr; }
 }
+
+/* ─── AD SLOTS ──────────────────────────────── */
+.ad-slot { width: 100%; margin-bottom: 16px; position: relative; }
+.ad-slot-label {
+  font-family: var(--mono); font-size: 9px; color: var(--muted);
+  letter-spacing: 0.15em; text-align: center; margin-bottom: 4px; opacity: 0.5;
+}
+.ad-adsense {
+  display: block; width: 100%; min-height: 90px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 2px; overflow: hidden;
+}
+.ad-custom {
+  display: block; width: 100%; border: 1px solid var(--border); border-radius: 2px;
+  overflow: hidden; background: var(--bg2); text-decoration: none;
+  transition: border-color 0.2s, box-shadow 0.2s; position: relative;
+}
+.ad-custom:hover { border-color: var(--accent2); box-shadow: 0 0 12px rgba(0,255,157,0.08); }
+.ad-custom-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; gap: 16px;
+}
+.ad-custom-text { flex: 1; min-width: 0; }
+.ad-custom-title {
+  font-family: var(--mono); font-size: 12px; color: var(--accent);
+  letter-spacing: 0.08em; margin-bottom: 3px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.ad-custom-desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.ad-custom-cta {
+  font-family: var(--mono); font-size: 11px; color: var(--accent);
+  border: 1px solid var(--accent); border-radius: 2px; padding: 6px 14px;
+  white-space: nowrap; flex-shrink: 0; letter-spacing: 0.1em; transition: background 0.15s;
+}
+.ad-custom:hover .ad-custom-cta { background: rgba(0,255,157,0.08); }
+.ad-custom-badge {
+  position: absolute; top: 4px; right: 6px; font-family: var(--mono);
+  font-size: 8px; color: var(--muted); letter-spacing: 0.05em; opacity: 0.4;
+}
+.ad-slot-rect .ad-adsense { min-height: 250px; }
+@media (max-width: 520px) { .ad-slot-rect .ad-adsense { min-height: 200px; } }
 </style>
 </head>
 <body>
@@ -750,6 +796,32 @@ footer {
     <div class="logo-prefix" data-i18n="logo_prefix">// AUDIO &amp; VIDEO EXTRACTION TOOL</div>
     <div class="logo">WAVE<span class="slash">⚡</span>CONVERT<span class="cursor"></span></div>
     <div class="logo-sub" data-i18n="logo_sub">TÉLÉCHARGE &amp; CONVERTIS DEPUIS N'IMPORTE QUELLE PLATEFORME</div>
+  </div>
+
+  <!-- ═══ AD SLOT 1 — LEADERBOARD HAUT ═══════════════════════════════════
+       Remplace data-ad-slot par ton vrai numéro de slot AdSense
+       ════════════════════════════════════════════════════════════════════ -->
+  <div class="ad-slot">
+    <div class="ad-slot-label">// PUBLICITÉ</div>
+    <!-- AdSense responsive horizontal -->
+    <ins class="adsbygoogle ad-adsense"
+         style="display:block"
+         data-ad-client="ca-pub-6620583007706439"
+         data-ad-slot="7820217630"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <!-- Custom banner #1 — remplace href, titre, description, CTA -->
+    <a class="ad-custom" href="https://TON-PARTENAIRE.com" target="_blank" rel="noopener sponsored">
+      <span class="ad-custom-badge">SPONSORISÉ</span>
+      <div class="ad-custom-inner">
+        <div class="ad-custom-text">
+          <div class="ad-custom-title">// VOTRE PUBLICITÉ ICI</div>
+          <div class="ad-custom-desc">Remplace ce bloc par ton partenaire — lien, titre, description</div>
+        </div>
+        <span class="ad-custom-cta">[ DÉCOUVRIR ]</span>
+      </div>
+    </a>
   </div>
 
   <!-- PLATFORMS -->
@@ -808,6 +880,32 @@ footer {
     </div>
   </div>
 
+
+  <!-- ═══ AD SLOT 2 — RECTANGLE MILIEU ═══════════════════════════════════
+       Affiché entre le panneau d'input et la progression
+       ════════════════════════════════════════════════════════════════════ -->
+  <div class="ad-slot ad-slot-rect">
+    <div class="ad-slot-label">// PUBLICITÉ</div>
+    <ins class="adsbygoogle ad-adsense"
+         style="display:block"
+         data-ad-client="ca-pub-6620583007706439"
+         data-ad-slot="3390018032"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <!-- Custom banner #2 -->
+    <a class="ad-custom" href="https://TON-PARTENAIRE-2.com" target="_blank" rel="noopener sponsored">
+      <span class="ad-custom-badge">SPONSORISÉ</span>
+      <div class="ad-custom-inner">
+        <div class="ad-custom-text">
+          <div class="ad-custom-title">// PUBLICITÉ PARTENAIRE</div>
+          <div class="ad-custom-desc">Emplacement rectangle — idéal pour une offre produit ou service</div>
+        </div>
+        <span class="ad-custom-cta">[ EN SAVOIR + ]</span>
+      </div>
+    </a>
+  </div>
+
   <!-- PROGRESS -->
   <div class="progress-panel" id="progressPanel">
     <div class="panel-header" data-i18n="panel_progress_header">PROCESS_LOG — OPÉRATION EN COURS</div>
@@ -847,6 +945,32 @@ footer {
   <!-- ERROR -->
   <div class="err-panel" id="errPanel"></div>
 
+
+  <!-- ═══ AD SLOT 3 — RECTANGLE RÉSULTAT ══════════════════════════════════
+       Affiché après le téléchargement (moment d'attention max)
+       ════════════════════════════════════════════════════════════════════ -->
+  <div class="ad-slot ad-slot-rect" id="adAfterDownload" style="display:none">
+    <div class="ad-slot-label">// PUBLICITÉ</div>
+    <ins class="adsbygoogle ad-adsense"
+         style="display:block"
+         data-ad-client="ca-pub-6620583007706439"
+         data-ad-slot="5372120486"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <!-- Custom banner #3 -->
+    <a class="ad-custom" href="https://TON-PARTENAIRE-3.com" target="_blank" rel="noopener sponsored">
+      <span class="ad-custom-badge">SPONSORISÉ</span>
+      <div class="ad-custom-inner">
+        <div class="ad-custom-text">
+          <div class="ad-custom-title">// OFFRE SPÉCIALE</div>
+          <div class="ad-custom-desc">Emplacement post-conversion — audience engagée, taux de clic élevé</div>
+        </div>
+        <span class="ad-custom-cta">[ VOIR L'OFFRE ]</span>
+      </div>
+    </a>
+  </div>
+
   <!-- RESET -->
   <button class="btn-reset" id="btnReset" data-i18n="btn_reset">$ cd .. &amp;&amp; reset // ← nouvelle conversion</button>
 
@@ -864,6 +988,32 @@ footer {
       <div class="stat-val">0</div>
       <div class="stat-key" data-i18n="stat_data">DATA_STOCKÉE</div>
     </div>
+  </div>
+
+
+  <!-- ═══ AD SLOT 4 — LEADERBOARD BAS ════════════════════════════════════
+       Entre les stats et le contenu SEO
+       ════════════════════════════════════════════════════════════════════ -->
+  <div class="ad-slot">
+    <div class="ad-slot-label">// PUBLICITÉ</div>
+    <ins class="adsbygoogle ad-adsense"
+         style="display:block"
+         data-ad-client="ca-pub-6620583007706439"
+         data-ad-slot="3348592377"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    <!-- Custom banner #4 -->
+    <a class="ad-custom" href="https://TON-PARTENAIRE-4.com" target="_blank" rel="noopener sponsored">
+      <span class="ad-custom-badge">SPONSORISÉ</span>
+      <div class="ad-custom-inner">
+        <div class="ad-custom-text">
+          <div class="ad-custom-title">// PARTENAIRE OFFICIEL</div>
+          <div class="ad-custom-desc">Bannière bas de page — visible après lecture du contenu SEO</div>
+        </div>
+        <span class="ad-custom-cta">[ DÉCOUVRIR ]</span>
+      </div>
+    </a>
   </div>
 
   <!-- SEO CONTENT -->
@@ -1261,6 +1411,7 @@ footer {
     // Reset UI
     document.getElementById('errPanel').classList.remove('show');
     document.getElementById('dlPanel').classList.remove('show');
+    document.getElementById('adAfterDownload').style.display = 'none';
     document.getElementById('btnReset').classList.remove('show');
     document.getElementById('btnConvert').disabled = true;
     document.getElementById('btnConvert').textContent = t.btn_converting;
@@ -1333,6 +1484,7 @@ footer {
               document.body.removeChild(a);
             };
             document.getElementById('dlPanel').classList.add('show');
+            document.getElementById('adAfterDownload').style.display = 'block';
             document.getElementById('btnReset').classList.add('show');
             document.getElementById('btnConvert').textContent = t.btn_convert;
             document.getElementById('btnConvert').disabled = false;
@@ -1357,6 +1509,7 @@ footer {
     document.getElementById('urlInput').value = '';
     document.getElementById('progressPanel').classList.remove('show');
     document.getElementById('dlPanel').classList.remove('show');
+    document.getElementById('adAfterDownload').style.display = 'none';
     document.getElementById('errPanel').classList.remove('show');
     document.getElementById('btnReset').classList.remove('show');
     document.getElementById('btnConvert').textContent = translations[currentLang].btn_convert;
