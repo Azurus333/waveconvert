@@ -866,18 +866,8 @@ footer {
             });
             const filename = payload.filename || `audio.${selectedFormat}`;
             document.getElementById('dlFilename').textContent = filename;
-            document.getElementById('btnDl').onclick = async () => {
-              try {
-                const resp = await fetch(payload.downloadUrl);
-                const blob = await resp.blob();
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(a.href);
-              } catch(e) { window.open(payload.downloadUrl, '_blank'); }
+            document.getElementById('btnDl').onclick = () => {
+              window.location.href = payload.downloadUrl;
             };
             document.getElementById('dlPanel').classList.add('show');
             document.getElementById('btnReset').classList.add('show');
