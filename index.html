@@ -3,8 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WAVECONVERT — Audio & Video Converter</title>
-<meta name="description" content="Télécharge et convertis n'importe quelle vidéo YouTube, SoundCloud, Spotify, Twitch en MP3, WAV, OGG ou M4A.">
+<title>WaveConvert — Convertisseur YouTube MP3 Gratuit | SoundCloud Downloader</title>
+<meta name="description" content="Convertisseur YouTube MP3 gratuit et rapide. Télécharge n'importe quelle vidéo YouTube, SoundCloud, Twitch en MP3, WAV, OGG ou M4A. Sans inscription, 100% gratuit.">
+<meta name="keywords" content="youtube to mp3, convertisseur youtube mp3, youtube mp3 gratuit, télécharger musique youtube, soundcloud downloader, soundcloud mp3, convertir youtube en mp3, youtube converter, mp3 converter, télécharger youtube audio">
+<meta name="robots" content="index, follow">
+<meta name="author" content="WaveConvert">
+<link rel="canonical" href="https://waveconvert.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://waveconvert.vercel.app/">
+<meta property="og:title" content="WaveConvert — Convertisseur YouTube MP3 Gratuit">
+<meta property="og:description" content="Convertis gratuitement n'importe quelle vidéo YouTube ou SoundCloud en MP3, WAV, OGG ou M4A. Sans inscription, instantané.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="WaveConvert — YouTube to MP3 Gratuit">
+<meta name="twitter:description" content="Convertisseur YouTube MP3 gratuit. SoundCloud, Twitch, Vimeo supportés. Sans inscription.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"WaveConvert","url":"https://waveconvert.vercel.app","description":"Convertisseur YouTube MP3 gratuit. Télécharge et convertis des vidéos YouTube, SoundCloud, Twitch en MP3, WAV, OGG ou M4A.","applicationCategory":"MultimediaApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"featureList":["Convertir YouTube en MP3","Télécharger SoundCloud MP3","Support WAV, OGG, M4A","Sans inscription","Gratuit et illimité"]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Comment convertir une vidéo YouTube en MP3 ?","acceptedAnswer":{"@type":"Answer","text":"Copiez l'URL de la vidéo YouTube, collez-la dans WaveConvert, choisissez le format MP3 et cliquez sur Convertir. Le téléchargement démarre en quelques secondes."}},{"@type":"Question","name":"WaveConvert est-il gratuit ?","acceptedAnswer":{"@type":"Answer","text":"Oui, WaveConvert est 100% gratuit et sans inscription. Vous pouvez convertir autant de vidéos que vous le souhaitez."}},{"@type":"Question","name":"Quels formats audio sont supportés ?","acceptedAnswer":{"@type":"Answer","text":"WaveConvert supporte MP3, WAV, OGG et M4A. Le MP3 est recommandé pour la compatibilité universelle."}},{"@type":"Question","name":"Est-ce que SoundCloud est supporté ?","acceptedAnswer":{"@type":"Answer","text":"Oui, WaveConvert supporte SoundCloud, YouTube, Twitch, Vimeo, Dailymotion, Twitter/X, Instagram, Facebook et plus de 1000 autres plateformes."}}]}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -579,6 +596,112 @@ footer {
   .stat-val { font-size: 16px; }
   footer { flex-direction: column; gap: 8px; }
 }
+
+  /* SEO CONTENT */
+  .seo-wrap {
+    width: 100%;
+    max-width: 780px;
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  .seo-section { border-top: 1px solid var(--border); padding-top: 32px; }
+  .seo-h2 {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .seo-p {
+    font-size: 15px;
+    color: #6b9e7e;
+    line-height: 1.7;
+  }
+  .seo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .seo-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 16px;
+  }
+  .seo-card-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+  .seo-card-desc {
+    font-size: 13px;
+    color: #4a7a5e;
+    line-height: 1.5;
+  }
+  .seo-steps { display: flex; flex-direction: column; gap: 20px; }
+  .seo-step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+  .seo-step-num {
+    font-family: var(--mono);
+    font-size: 24px;
+    color: var(--border);
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 2px;
+  }
+  .seo-step-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .seo-step-desc { font-size: 13px; color: #4a7a5e; line-height: 1.6; }
+  .faq-list { display: flex; flex-direction: column; gap: 8px; }
+  .faq-item {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .faq-item[open] { border-color: var(--accent2); }
+  .faq-q {
+    padding: 14px 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s;
+  }
+  .faq-q:hover { color: var(--accent); }
+  .faq-q::after { content: '+'; color: var(--accent); font-size: 16px; }
+  .faq-item[open] .faq-q::after { content: '−'; }
+  .faq-a {
+    padding: 0 16px 14px;
+    font-size: 13px;
+    color: #4a7a5e;
+    line-height: 1.6;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+  }
+  @media (max-width: 600px) {
+    .seo-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 400px) {
+    .seo-grid { grid-template-columns: 1fr; }
+  }
+
 </style>
 </head>
 <body>
@@ -715,6 +838,99 @@ footer {
   </div>
 
   <!-- FOOTER -->
+  <!-- SEO CONTENT -->
+  <div class="seo-wrap">
+
+    <section class="seo-section">
+      <h2 class="seo-h2">// CONVERTISSEUR YOUTUBE MP3 GRATUIT</h2>
+      <p class="seo-p">WaveConvert est le convertisseur YouTube MP3 le plus rapide et le plus simple. Colle une URL YouTube, choisis ton format audio et télécharge ta musique en quelques secondes — sans inscription, sans limite, 100% gratuit.</p>
+    </section>
+
+    <section class="seo-section">
+      <h2 class="seo-h2">// PLATEFORMES SUPPORTÉES</h2>
+      <div class="seo-grid">
+        <div class="seo-card">
+          <div class="seo-card-title">YouTube → MP3</div>
+          <div class="seo-card-desc">Convertis n'importe quelle vidéo YouTube en MP3 haute qualité. Clips, podcasts, lives, playlists.</div>
+        </div>
+        <div class="seo-card">
+          <div class="seo-card-title">SoundCloud → MP3</div>
+          <div class="seo-card-desc">Télécharge tes tracks SoundCloud préférées en MP3, WAV ou OGG directement depuis l'URL.</div>
+        </div>
+        <div class="seo-card">
+          <div class="seo-card-title">Twitch → MP3</div>
+          <div class="seo-card-desc">Extrais l'audio de n'importe quel VOD ou clip Twitch en quelques secondes.</div>
+        </div>
+        <div class="seo-card">
+          <div class="seo-card-title">Vimeo → MP3</div>
+          <div class="seo-card-desc">Convertis des vidéos Vimeo en fichiers audio MP3 ou WAV pour une écoute hors ligne.</div>
+        </div>
+        <div class="seo-card">
+          <div class="seo-card-title">Twitter/X → MP3</div>
+          <div class="seo-card-desc">Télécharge l'audio de n'importe quelle vidéo Twitter/X postée publiquement.</div>
+        </div>
+        <div class="seo-card">
+          <div class="seo-card-title">1000+ sites</div>
+          <div class="seo-card-desc">Instagram, Facebook, Dailymotion, Reddit et plus de 1000 autres plateformes supportées.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="seo-section">
+      <h2 class="seo-h2">// COMMENT ÇA MARCHE</h2>
+      <div class="seo-steps">
+        <div class="seo-step">
+          <div class="seo-step-num">01</div>
+          <div>
+            <h3 class="seo-step-title">Copie l'URL</h3>
+            <p class="seo-step-desc">Va sur YouTube, SoundCloud ou n'importe quelle plateforme. Copie l'URL de la vidéo ou du morceau depuis la barre d'adresse.</p>
+          </div>
+        </div>
+        <div class="seo-step">
+          <div class="seo-step-num">02</div>
+          <div>
+            <h3 class="seo-step-title">Colle et convertis</h3>
+            <p class="seo-step-desc">Colle l'URL dans WaveConvert, choisis ton format (MP3, WAV, OGG, M4A) et lance la conversion en un clic.</p>
+          </div>
+        </div>
+        <div class="seo-step">
+          <div class="seo-step-num">03</div>
+          <div>
+            <h3 class="seo-step-title">Télécharge</h3>
+            <p class="seo-step-desc">Le fichier est prêt en quelques secondes. Clique sur le bouton de téléchargement et c'est sur ton appareil.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="seo-section">
+      <h2 class="seo-h2">// FAQ — QUESTIONS FRÉQUENTES</h2>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary class="faq-q">Comment convertir YouTube en MP3 gratuitement ?</summary>
+          <p class="faq-a">Copiez l'URL de votre vidéo YouTube, collez-la dans WaveConvert, sélectionnez MP3 et cliquez sur "Lancer la conversion". Le fichier MP3 se télécharge automatiquement — sans inscription, sans logiciel à installer.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Quelle est la qualité audio des fichiers convertis ?</summary>
+          <p class="faq-a">WaveConvert extrait le meilleur flux audio disponible depuis la source. Pour YouTube, cela correspond généralement à 128-320 kbps selon la vidéo originale. Le format WAV offre la meilleure qualité sans compression.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Y a-t-il une limite de durée ou de nombre de conversions ?</summary>
+          <p class="faq-a">Non. WaveConvert est totalement gratuit et sans limite. Convertissez autant de vidéos que vous le souhaitez, sans créer de compte.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">Mes données sont-elles stockées ?</summary>
+          <p class="faq-a">Non. Les fichiers audio convertis sont automatiquement supprimés de nos serveurs après 5 minutes. Nous ne conservons aucune donnée personnelle ni historique de vos conversions.</p>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-q">WaveConvert fonctionne-t-il sur mobile ?</summary>
+          <p class="faq-a">Oui, WaveConvert fonctionne sur tous les appareils — smartphone, tablette ou ordinateur — sans aucune installation. Ouvrez simplement le site dans votre navigateur.</p>
+        </details>
+      </div>
+    </section>
+
+  </div>
+
   <footer>
     <span>© 2026 WAVECONVERT // POWERED BY REVOLUTION NETWORK</span>
     <span>* Spotify : métadonnées seulement</span>
