@@ -686,10 +686,10 @@ footer {
   <!-- DOWNLOAD -->
   <div class="dl-panel" id="dlPanel">
     <div class="dl-header">// OUTPUT_READY — FICHIER DISPONIBLE</div>
-    <a class="btn-dl" id="btnDl" href="#" download>
+    <div class="btn-dl" id="btnDl" style="cursor:pointer">
       <span id="dlFilename">audio.mp3</span>
       <span class="dl-arrow">⬇</span>
-    </a>
+    </div>
   </div>
 
   <!-- ERROR -->
@@ -865,9 +865,20 @@ footer {
               document.getElementById('s-'+s).classList.add('done');
             });
             const filename = payload.filename || `audio.${selectedFormat}`;
-            document.getElementById('btnDl').href = payload.downloadUrl;
-            document.getElementById('btnDl').download = filename;
             document.getElementById('dlFilename').textContent = filename;
+            document.getElementById('btnDl').onclick = async () => {
+              try {
+                const resp = await fetch(payload.downloadUrl);
+                const blob = await resp.blob();
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(a.href);
+              } catch(e) { window.open(payload.downloadUrl, '_blank'); }
+            };
             document.getElementById('dlPanel').classList.add('show');
             document.getElementById('btnReset').classList.add('show');
             document.getElementById('btnConvert').textContent = '[ LANCER LA CONVERSION ]';
