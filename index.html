@@ -122,6 +122,11 @@ body::after {
   font-size: 11px;
   color: var(--muted);
 }
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
 .topbar-status {
   display: flex;
   align-items: center;
@@ -134,6 +139,27 @@ body::after {
   box-shadow: 0 0 8px var(--accent);
   animation: blink 2s infinite;
 }
+
+/* LANG TOGGLE */
+.lang-toggle {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.lang-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 2px 7px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: all 0.15s;
+}
+.lang-btn:hover { color: var(--accent); border-color: var(--accent2); }
+.lang-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(0,255,157,0.06); }
 
 /* LOGO */
 .logo-block {
@@ -433,9 +459,6 @@ body::after {
   flex-shrink: 0;
 }
 .log-line.done .log-prompt { color: var(--accent2); }
-.log-line.done::before {
-  content: none;
-}
 
 .log-text { color: var(--text); line-height: 1.4; }
 .log-line.active .log-text::after {
@@ -597,111 +620,110 @@ footer {
   footer { flex-direction: column; gap: 8px; }
 }
 
-  /* SEO CONTENT */
-  .seo-wrap {
-    width: 100%;
-    max-width: 780px;
-    margin-top: 48px;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-  }
-  .seo-section { border-top: 1px solid var(--border); padding-top: 32px; }
-  .seo-h2 {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: var(--accent);
-    margin-bottom: 16px;
-  }
-  .seo-p {
-    font-size: 15px;
-    color: #6b9e7e;
-    line-height: 1.7;
-  }
-  .seo-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-  .seo-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 16px;
-  }
-  .seo-card-title {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent);
-    margin-bottom: 8px;
-    letter-spacing: 0.05em;
-  }
-  .seo-card-desc {
-    font-size: 13px;
-    color: #4a7a5e;
-    line-height: 1.5;
-  }
-  .seo-steps { display: flex; flex-direction: column; gap: 20px; }
-  .seo-step {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-  }
-  .seo-step-num {
-    font-family: var(--mono);
-    font-size: 24px;
-    color: var(--border);
-    flex-shrink: 0;
-    line-height: 1;
-    margin-top: 2px;
-  }
-  .seo-step-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 6px;
-  }
-  .seo-step-desc { font-size: 13px; color: #4a7a5e; line-height: 1.6; }
-  .faq-list { display: flex; flex-direction: column; gap: 8px; }
-  .faq-item {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .faq-item[open] { border-color: var(--accent2); }
-  .faq-q {
-    padding: 14px 16px;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text);
-    cursor: pointer;
-    letter-spacing: 0.03em;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: color 0.2s;
-  }
-  .faq-q:hover { color: var(--accent); }
-  .faq-q::after { content: '+'; color: var(--accent); font-size: 16px; }
-  .faq-item[open] .faq-q::after { content: '−'; }
-  .faq-a {
-    padding: 0 16px 14px;
-    font-size: 13px;
-    color: #4a7a5e;
-    line-height: 1.6;
-    border-top: 1px solid var(--border);
-    padding-top: 12px;
-  }
-  @media (max-width: 600px) {
-    .seo-grid { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 400px) {
-    .seo-grid { grid-template-columns: 1fr; }
-  }
-
+/* SEO CONTENT */
+.seo-wrap {
+  width: 100%;
+  max-width: 780px;
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.seo-section { border-top: 1px solid var(--border); padding-top: 32px; }
+.seo-h2 {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.seo-p {
+  font-size: 15px;
+  color: #6b9e7e;
+  line-height: 1.7;
+}
+.seo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.seo-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 16px;
+}
+.seo-card-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+.seo-card-desc {
+  font-size: 13px;
+  color: #4a7a5e;
+  line-height: 1.5;
+}
+.seo-steps { display: flex; flex-direction: column; gap: 20px; }
+.seo-step {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+.seo-step-num {
+  font-family: var(--mono);
+  font-size: 24px;
+  color: var(--border);
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+.seo-step-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.seo-step-desc { font-size: 13px; color: #4a7a5e; line-height: 1.6; }
+.faq-list { display: flex; flex-direction: column; gap: 8px; }
+.faq-item {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.faq-item[open] { border-color: var(--accent2); }
+.faq-q {
+  padding: 14px 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: color 0.2s;
+}
+.faq-q:hover { color: var(--accent); }
+.faq-q::after { content: '+'; color: var(--accent); font-size: 16px; }
+.faq-item[open] .faq-q::after { content: '−'; }
+.faq-a {
+  padding: 0 16px 14px;
+  font-size: 13px;
+  color: #4a7a5e;
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+@media (max-width: 600px) {
+  .seo-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 400px) {
+  .seo-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -710,22 +732,28 @@ footer {
 
   <!-- TOP BAR -->
   <div class="topbar">
-    <div class="topbar-status">
-      <div class="dot-live"></div>
-      SYSTEM ONLINE // NODE NETWORK ACTIVE
+    <div class="topbar-left">
+      <div class="topbar-status">
+        <div class="dot-live"></div>
+        <span data-i18n="topbar_status">SYSTEM ONLINE // NODE NETWORK ACTIVE</span>
+      </div>
+      <div class="lang-toggle">
+        <button class="lang-btn active" id="btnLangFR" onclick="setLang('fr')">FR</button>
+        <button class="lang-btn" id="btnLangEN" onclick="setLang('en')">EN</button>
+      </div>
     </div>
     <div>v2.4.1 // SECURE</div>
   </div>
 
   <!-- LOGO -->
   <div class="logo-block">
-    <div class="logo-prefix">// AUDIO &amp; VIDEO EXTRACTION TOOL</div>
+    <div class="logo-prefix" data-i18n="logo_prefix">// AUDIO &amp; VIDEO EXTRACTION TOOL</div>
     <div class="logo">WAVE<span class="slash">⚡</span>CONVERT<span class="cursor"></span></div>
-    <div class="logo-sub">TÉLÉCHARGE &amp; CONVERTIS DEPUIS N'IMPORTE QUELLE PLATEFORME</div>
+    <div class="logo-sub" data-i18n="logo_sub">TÉLÉCHARGE &amp; CONVERTIS DEPUIS N'IMPORTE QUELLE PLATEFORME</div>
   </div>
 
   <!-- PLATFORMS -->
-  <div class="platforms-label">// PLATEFORMES SUPPORTÉES</div>
+  <div class="platforms-label" data-i18n="platforms_label">// PLATEFORMES SUPPORTÉES</div>
   <div class="platforms">
     <div class="plat yt">YOUTUBE</div>
     <div class="plat sc">SOUNDCLOUD</div>
@@ -736,12 +764,12 @@ footer {
     <div class="plat">TWITTER/X</div>
     <div class="plat">INSTAGRAM</div>
     <div class="plat">FACEBOOK</div>
-    <div class="plat">+ 1000 AUTRES</div>
+    <div class="plat" data-i18n="platforms_more">+ 1000 AUTRES</div>
   </div>
 
   <!-- INPUT PANEL -->
   <div class="panel">
-    <div class="panel-header">SOURCE_URL — COLLE LE LIEN CI-DESSOUS</div>
+    <div class="panel-header" data-i18n="panel_input_header">SOURCE_URL — COLLE LE LIEN CI-DESSOUS</div>
     <div class="panel-body">
 
       <div class="input-wrap">
@@ -749,11 +777,12 @@ footer {
           class="url-input"
           id="urlInput"
           type="text"
+          data-i18n-placeholder="input_placeholder"
           placeholder="https://www.youtube.com/watch?v=... ou soundcloud.com/..."
           autocomplete="off"
           spellcheck="false"
         />
-        <button class="btn-paste" id="btnPaste">[ COLLER ]</button>
+        <button class="btn-paste" id="btnPaste" data-i18n="btn_paste">[ COLLER ]</button>
       </div>
 
       <div class="preview" id="preview">
@@ -765,14 +794,14 @@ footer {
       </div>
 
       <div class="row-formats">
-        <span class="fmt-label">OUTPUT_FORMAT //</span>
+        <span class="fmt-label" data-i18n="fmt_label">OUTPUT_FORMAT //</span>
         <div class="fmt active" data-fmt="mp3">MP3</div>
         <div class="fmt" data-fmt="wav">WAV</div>
         <div class="fmt" data-fmt="ogg">OGG</div>
         <div class="fmt" data-fmt="m4a">M4A</div>
       </div>
 
-      <button class="btn-convert" id="btnConvert">
+      <button class="btn-convert" id="btnConvert" data-i18n="btn_convert">
         [ LANCER LA CONVERSION ]
       </button>
 
@@ -781,7 +810,7 @@ footer {
 
   <!-- PROGRESS -->
   <div class="progress-panel" id="progressPanel">
-    <div class="panel-header">PROCESS_LOG — OPÉRATION EN COURS</div>
+    <div class="panel-header" data-i18n="panel_progress_header">PROCESS_LOG — OPÉRATION EN COURS</div>
     <div class="progress-log" id="progressLog">
       <div class="log-line" id="s-extract">
         <span class="log-prompt">$&gt;</span>
@@ -808,7 +837,7 @@ footer {
 
   <!-- DOWNLOAD -->
   <div class="dl-panel" id="dlPanel">
-    <div class="dl-header">// OUTPUT_READY — FICHIER DISPONIBLE</div>
+    <div class="dl-header" data-i18n="dl_header">// OUTPUT_READY — FICHIER DISPONIBLE</div>
     <div class="btn-dl" id="btnDl" style="cursor:pointer">
       <span id="dlFilename">audio.mp3</span>
       <span class="dl-arrow">⬇</span>
@@ -819,112 +848,111 @@ footer {
   <div class="err-panel" id="errPanel"></div>
 
   <!-- RESET -->
-  <button class="btn-reset" id="btnReset">$ cd .. &amp;&amp; reset // ← nouvelle conversion</button>
+  <button class="btn-reset" id="btnReset" data-i18n="btn_reset">$ cd .. &amp;&amp; reset // ← nouvelle conversion</button>
 
   <!-- STATS -->
   <div class="stats">
     <div class="stat">
       <div class="stat-val">1000+</div>
-      <div class="stat-key">SITES_SUPPORTÉS</div>
+      <div class="stat-key" data-i18n="stat_sites">SITES_SUPPORTÉS</div>
     </div>
     <div class="stat">
       <div class="stat-val">FREE</div>
-      <div class="stat-key">SANS_INSCRIPTION</div>
+      <div class="stat-key" data-i18n="stat_free">SANS_INSCRIPTION</div>
     </div>
     <div class="stat">
       <div class="stat-val">0</div>
-      <div class="stat-key">DATA_STOCKÉE</div>
+      <div class="stat-key" data-i18n="stat_data">DATA_STOCKÉE</div>
     </div>
   </div>
 
-  <!-- FOOTER -->
   <!-- SEO CONTENT -->
   <div class="seo-wrap">
 
     <section class="seo-section">
-      <h2 class="seo-h2">// CONVERTISSEUR YOUTUBE MP3 GRATUIT</h2>
-      <p class="seo-p">WaveConvert est le convertisseur YouTube MP3 le plus rapide et le plus simple. Colle une URL YouTube, choisis ton format audio et télécharge ta musique en quelques secondes — sans inscription, sans limite, 100% gratuit.</p>
+      <h2 class="seo-h2" data-i18n="seo_h2_1">// CONVERTISSEUR YOUTUBE MP3 GRATUIT</h2>
+      <p class="seo-p" data-i18n="seo_p_1">WaveConvert est le convertisseur YouTube MP3 le plus rapide et le plus simple. Colle une URL YouTube, choisis ton format audio et télécharge ta musique en quelques secondes — sans inscription, sans limite, 100% gratuit.</p>
     </section>
 
     <section class="seo-section">
-      <h2 class="seo-h2">// PLATEFORMES SUPPORTÉES</h2>
+      <h2 class="seo-h2" data-i18n="seo_h2_2">// PLATEFORMES SUPPORTÉES</h2>
       <div class="seo-grid">
         <div class="seo-card">
           <div class="seo-card-title">YouTube → MP3</div>
-          <div class="seo-card-desc">Convertis n'importe quelle vidéo YouTube en MP3 haute qualité. Clips, podcasts, lives, playlists.</div>
+          <div class="seo-card-desc" data-i18n="seo_card_yt">Convertis n'importe quelle vidéo YouTube en MP3 haute qualité. Clips, podcasts, lives, playlists.</div>
         </div>
         <div class="seo-card">
           <div class="seo-card-title">SoundCloud → MP3</div>
-          <div class="seo-card-desc">Télécharge tes tracks SoundCloud préférées en MP3, WAV ou OGG directement depuis l'URL.</div>
+          <div class="seo-card-desc" data-i18n="seo_card_sc">Télécharge tes tracks SoundCloud préférées en MP3, WAV ou OGG directement depuis l'URL.</div>
         </div>
         <div class="seo-card">
           <div class="seo-card-title">Twitch → MP3</div>
-          <div class="seo-card-desc">Extrais l'audio de n'importe quel VOD ou clip Twitch en quelques secondes.</div>
+          <div class="seo-card-desc" data-i18n="seo_card_tw">Extrais l'audio de n'importe quel VOD ou clip Twitch en quelques secondes.</div>
         </div>
         <div class="seo-card">
           <div class="seo-card-title">Vimeo → MP3</div>
-          <div class="seo-card-desc">Convertis des vidéos Vimeo en fichiers audio MP3 ou WAV pour une écoute hors ligne.</div>
+          <div class="seo-card-desc" data-i18n="seo_card_vm">Convertis des vidéos Vimeo en fichiers audio MP3 ou WAV pour une écoute hors ligne.</div>
         </div>
         <div class="seo-card">
           <div class="seo-card-title">Twitter/X → MP3</div>
-          <div class="seo-card-desc">Télécharge l'audio de n'importe quelle vidéo Twitter/X postée publiquement.</div>
+          <div class="seo-card-desc" data-i18n="seo_card_tw2">Télécharge l'audio de n'importe quelle vidéo Twitter/X postée publiquement.</div>
         </div>
         <div class="seo-card">
-          <div class="seo-card-title">1000+ sites</div>
-          <div class="seo-card-desc">Instagram, Facebook, Dailymotion, Reddit et plus de 1000 autres plateformes supportées.</div>
+          <div class="seo-card-title" data-i18n="seo_card_more_title">1000+ sites</div>
+          <div class="seo-card-desc" data-i18n="seo_card_more">Instagram, Facebook, Dailymotion, Reddit et plus de 1000 autres plateformes supportées.</div>
         </div>
       </div>
     </section>
 
     <section class="seo-section">
-      <h2 class="seo-h2">// COMMENT ÇA MARCHE</h2>
+      <h2 class="seo-h2" data-i18n="seo_h2_3">// COMMENT ÇA MARCHE</h2>
       <div class="seo-steps">
         <div class="seo-step">
           <div class="seo-step-num">01</div>
           <div>
-            <h3 class="seo-step-title">Copie l'URL</h3>
-            <p class="seo-step-desc">Va sur YouTube, SoundCloud ou n'importe quelle plateforme. Copie l'URL de la vidéo ou du morceau depuis la barre d'adresse.</p>
+            <h3 class="seo-step-title" data-i18n="step1_title">Copie l'URL</h3>
+            <p class="seo-step-desc" data-i18n="step1_desc">Va sur YouTube, SoundCloud ou n'importe quelle plateforme. Copie l'URL de la vidéo ou du morceau depuis la barre d'adresse.</p>
           </div>
         </div>
         <div class="seo-step">
           <div class="seo-step-num">02</div>
           <div>
-            <h3 class="seo-step-title">Colle et convertis</h3>
-            <p class="seo-step-desc">Colle l'URL dans WaveConvert, choisis ton format (MP3, WAV, OGG, M4A) et lance la conversion en un clic.</p>
+            <h3 class="seo-step-title" data-i18n="step2_title">Colle et convertis</h3>
+            <p class="seo-step-desc" data-i18n="step2_desc">Colle l'URL dans WaveConvert, choisis ton format (MP3, WAV, OGG, M4A) et lance la conversion en un clic.</p>
           </div>
         </div>
         <div class="seo-step">
           <div class="seo-step-num">03</div>
           <div>
-            <h3 class="seo-step-title">Télécharge</h3>
-            <p class="seo-step-desc">Le fichier est prêt en quelques secondes. Clique sur le bouton de téléchargement et c'est sur ton appareil.</p>
+            <h3 class="seo-step-title" data-i18n="step3_title">Télécharge</h3>
+            <p class="seo-step-desc" data-i18n="step3_desc">Le fichier est prêt en quelques secondes. Clique sur le bouton de téléchargement et c'est sur ton appareil.</p>
           </div>
         </div>
       </div>
     </section>
 
     <section class="seo-section">
-      <h2 class="seo-h2">// FAQ — QUESTIONS FRÉQUENTES</h2>
+      <h2 class="seo-h2" data-i18n="seo_h2_faq">// FAQ — QUESTIONS FRÉQUENTES</h2>
       <div class="faq-list">
         <details class="faq-item">
-          <summary class="faq-q">Comment convertir YouTube en MP3 gratuitement ?</summary>
-          <p class="faq-a">Copiez l'URL de votre vidéo YouTube, collez-la dans WaveConvert, sélectionnez MP3 et cliquez sur "Lancer la conversion". Le fichier MP3 se télécharge automatiquement — sans inscription, sans logiciel à installer.</p>
+          <summary class="faq-q" data-i18n="faq1_q">Comment convertir YouTube en MP3 gratuitement ?</summary>
+          <p class="faq-a" data-i18n="faq1_a">Copiez l'URL de votre vidéo YouTube, collez-la dans WaveConvert, sélectionnez MP3 et cliquez sur "Lancer la conversion". Le fichier MP3 se télécharge automatiquement — sans inscription, sans logiciel à installer.</p>
         </details>
         <details class="faq-item">
-          <summary class="faq-q">Quelle est la qualité audio des fichiers convertis ?</summary>
-          <p class="faq-a">WaveConvert extrait le meilleur flux audio disponible depuis la source. Pour YouTube, cela correspond généralement à 128-320 kbps selon la vidéo originale. Le format WAV offre la meilleure qualité sans compression.</p>
+          <summary class="faq-q" data-i18n="faq2_q">Quelle est la qualité audio des fichiers convertis ?</summary>
+          <p class="faq-a" data-i18n="faq2_a">WaveConvert extrait le meilleur flux audio disponible depuis la source. Pour YouTube, cela correspond généralement à 128-320 kbps selon la vidéo originale. Le format WAV offre la meilleure qualité sans compression.</p>
         </details>
         <details class="faq-item">
-          <summary class="faq-q">Y a-t-il une limite de durée ou de nombre de conversions ?</summary>
-          <p class="faq-a">Non. WaveConvert est totalement gratuit et sans limite. Convertissez autant de vidéos que vous le souhaitez, sans créer de compte.</p>
+          <summary class="faq-q" data-i18n="faq3_q">Y a-t-il une limite de durée ou de nombre de conversions ?</summary>
+          <p class="faq-a" data-i18n="faq3_a">Non. WaveConvert est totalement gratuit et sans limite. Convertissez autant de vidéos que vous le souhaitez, sans créer de compte.</p>
         </details>
         <details class="faq-item">
-          <summary class="faq-q">Mes données sont-elles stockées ?</summary>
-          <p class="faq-a">Non. Les fichiers audio convertis sont automatiquement supprimés de nos serveurs après 5 minutes. Nous ne conservons aucune donnée personnelle ni historique de vos conversions.</p>
+          <summary class="faq-q" data-i18n="faq4_q">Mes données sont-elles stockées ?</summary>
+          <p class="faq-a" data-i18n="faq4_a">Non. Les fichiers audio convertis sont automatiquement supprimés de nos serveurs après 5 minutes. Nous ne conservons aucune donnée personnelle ni historique de vos conversions.</p>
         </details>
         <details class="faq-item">
-          <summary class="faq-q">WaveConvert fonctionne-t-il sur mobile ?</summary>
-          <p class="faq-a">Oui, WaveConvert fonctionne sur tous les appareils — smartphone, tablette ou ordinateur — sans aucune installation. Ouvrez simplement le site dans votre navigateur.</p>
+          <summary class="faq-q" data-i18n="faq5_q">WaveConvert fonctionne-t-il sur mobile ?</summary>
+          <p class="faq-a" data-i18n="faq5_a">Oui, WaveConvert fonctionne sur tous les appareils — smartphone, tablette ou ordinateur — sans aucune installation. Ouvrez simplement le site dans votre navigateur.</p>
         </details>
       </div>
     </section>
@@ -932,20 +960,218 @@ footer {
   </div>
 
   <footer>
-    <span>© 2026 WAVECONVERT // POWERED BY REVOLUTION NETWORK</span>
-    <span>* Spotify : métadonnées seulement</span>
+    <span data-i18n="footer_copy">© 2026 WAVECONVERT // POWERED BY REVOLUTION NETWORK</span>
+    <span data-i18n="footer_note">* Spotify : métadonnées seulement</span>
   </footer>
 
 </div>
 
 <script>
-  // ⚠ REMPLACE PAR TON SOUS-DOMAINE API EN HTTPS
+  // ============================================================
+  // I18N — TRANSLATIONS
+  // ============================================================
+  const translations = {
+    fr: {
+      // page meta
+      page_title:           'WaveConvert — Convertisseur YouTube MP3 Gratuit | SoundCloud Downloader',
+      page_desc:            'Convertisseur YouTube MP3 gratuit et rapide. Télécharge n\'importe quelle vidéo YouTube, SoundCloud, Twitch en MP3, WAV, OGG ou M4A. Sans inscription, 100% gratuit.',
+      // topbar
+      topbar_status:        'SYSTEM ONLINE // NODE NETWORK ACTIVE',
+      // logo
+      logo_prefix:          '// OUTIL D\'EXTRACTION AUDIO & VIDÉO',
+      logo_sub:             'TÉLÉCHARGE & CONVERTIS DEPUIS N\'IMPORTE QUELLE PLATEFORME',
+      // platforms
+      platforms_label:      '// PLATEFORMES SUPPORTÉES',
+      platforms_more:       '+ 1000 AUTRES',
+      // input panel
+      panel_input_header:   'SOURCE_URL — COLLE LE LIEN CI-DESSOUS',
+      input_placeholder:    'https://www.youtube.com/watch?v=... ou soundcloud.com/...',
+      btn_paste:            '[ COLLER ]',
+      fmt_label:            'FORMAT_SORTIE //',
+      btn_convert:          '[ LANCER LA CONVERSION ]',
+      btn_converting:       '[ CONVERSION EN COURS... ]',
+      // progress
+      panel_progress_header:'PROCESS_LOG — OPÉRATION EN COURS',
+      // download
+      dl_header:            '// OUTPUT_READY — FICHIER DISPONIBLE',
+      // reset
+      btn_reset:            '$ cd .. && reset // ← nouvelle conversion',
+      // stats
+      stat_sites:           'SITES_SUPPORTÉS',
+      stat_free:            'SANS_INSCRIPTION',
+      stat_data:            'DATA_STOCKÉE',
+      // seo
+      seo_h2_1:             '// CONVERTISSEUR YOUTUBE MP3 GRATUIT',
+      seo_p_1:              'WaveConvert est le convertisseur YouTube MP3 le plus rapide et le plus simple. Colle une URL YouTube, choisis ton format audio et télécharge ta musique en quelques secondes — sans inscription, sans limite, 100% gratuit.',
+      seo_h2_2:             '// PLATEFORMES SUPPORTÉES',
+      seo_card_yt:          'Convertis n\'importe quelle vidéo YouTube en MP3 haute qualité. Clips, podcasts, lives, playlists.',
+      seo_card_sc:          'Télécharge tes tracks SoundCloud préférées en MP3, WAV ou OGG directement depuis l\'URL.',
+      seo_card_tw:          'Extrais l\'audio de n\'importe quel VOD ou clip Twitch en quelques secondes.',
+      seo_card_vm:          'Convertis des vidéos Vimeo en fichiers audio MP3 ou WAV pour une écoute hors ligne.',
+      seo_card_tw2:         'Télécharge l\'audio de n\'importe quelle vidéo Twitter/X postée publiquement.',
+      seo_card_more_title:  '1000+ sites',
+      seo_card_more:        'Instagram, Facebook, Dailymotion, Reddit et plus de 1000 autres plateformes supportées.',
+      seo_h2_3:             '// COMMENT ÇA MARCHE',
+      step1_title:          'Copie l\'URL',
+      step1_desc:           'Va sur YouTube, SoundCloud ou n\'importe quelle plateforme. Copie l\'URL de la vidéo ou du morceau depuis la barre d\'adresse.',
+      step2_title:          'Colle et convertis',
+      step2_desc:           'Colle l\'URL dans WaveConvert, choisis ton format (MP3, WAV, OGG, M4A) et lance la conversion en un clic.',
+      step3_title:          'Télécharge',
+      step3_desc:           'Le fichier est prêt en quelques secondes. Clique sur le bouton de téléchargement et c\'est sur ton appareil.',
+      seo_h2_faq:           '// FAQ — QUESTIONS FRÉQUENTES',
+      faq1_q:               'Comment convertir YouTube en MP3 gratuitement ?',
+      faq1_a:               'Copiez l\'URL de votre vidéo YouTube, collez-la dans WaveConvert, sélectionnez MP3 et cliquez sur "Lancer la conversion". Le fichier MP3 se télécharge automatiquement — sans inscription, sans logiciel à installer.',
+      faq2_q:               'Quelle est la qualité audio des fichiers convertis ?',
+      faq2_a:               'WaveConvert extrait le meilleur flux audio disponible depuis la source. Pour YouTube, cela correspond généralement à 128-320 kbps selon la vidéo originale. Le format WAV offre la meilleure qualité sans compression.',
+      faq3_q:               'Y a-t-il une limite de durée ou de nombre de conversions ?',
+      faq3_a:               'Non. WaveConvert est totalement gratuit et sans limite. Convertissez autant de vidéos que vous le souhaitez, sans créer de compte.',
+      faq4_q:               'Mes données sont-elles stockées ?',
+      faq4_a:               'Non. Les fichiers audio convertis sont automatiquement supprimés de nos serveurs après 5 minutes. Nous ne conservons aucune donnée personnelle ni historique de vos conversions.',
+      faq5_q:               'WaveConvert fonctionne-t-il sur mobile ?',
+      faq5_a:               'Oui, WaveConvert fonctionne sur tous les appareils — smartphone, tablette ou ordinateur — sans aucune installation. Ouvrez simplement le site dans votre navigateur.',
+      // footer
+      footer_copy:          '© 2026 WAVECONVERT // POWERED BY REVOLUTION NETWORK',
+      footer_note:          '* Spotify : métadonnées seulement',
+      // error prefix
+      error_prefix:         'ERREUR ::',
+    },
+    en: {
+      // page meta
+      page_title:           'WaveConvert — Free YouTube to MP3 Converter | SoundCloud Downloader',
+      page_desc:            'Free and fast YouTube to MP3 converter. Download any YouTube, SoundCloud, Twitch video as MP3, WAV, OGG or M4A. No sign-up, 100% free.',
+      // topbar
+      topbar_status:        'SYSTEM ONLINE // NODE NETWORK ACTIVE',
+      // logo
+      logo_prefix:          '// AUDIO & VIDEO EXTRACTION TOOL',
+      logo_sub:             'DOWNLOAD & CONVERT FROM ANY PLATFORM',
+      // platforms
+      platforms_label:      '// SUPPORTED PLATFORMS',
+      platforms_more:       '+ 1000 MORE',
+      // input panel
+      panel_input_header:   'SOURCE_URL — PASTE YOUR LINK BELOW',
+      input_placeholder:    'https://www.youtube.com/watch?v=... or soundcloud.com/...',
+      btn_paste:            '[ PASTE ]',
+      fmt_label:            'OUTPUT_FORMAT //',
+      btn_convert:          '[ START CONVERSION ]',
+      btn_converting:       '[ CONVERTING... ]',
+      // progress
+      panel_progress_header:'PROCESS_LOG — OPERATION IN PROGRESS',
+      // download
+      dl_header:            '// OUTPUT_READY — FILE AVAILABLE',
+      // reset
+      btn_reset:            '$ cd .. && reset // ← new conversion',
+      // stats
+      stat_sites:           'SUPPORTED_SITES',
+      stat_free:            'NO_SIGNUP',
+      stat_data:            'DATA_STORED',
+      // seo
+      seo_h2_1:             '// FREE YOUTUBE TO MP3 CONVERTER',
+      seo_p_1:              'WaveConvert is the fastest and simplest YouTube MP3 converter. Paste a YouTube URL, pick your audio format and download your music in seconds — no sign-up, no limits, 100% free.',
+      seo_h2_2:             '// SUPPORTED PLATFORMS',
+      seo_card_yt:          'Convert any YouTube video to high-quality MP3. Clips, podcasts, live streams, playlists.',
+      seo_card_sc:          'Download your favourite SoundCloud tracks as MP3, WAV or OGG directly from the URL.',
+      seo_card_tw:          'Extract audio from any Twitch VOD or clip in seconds.',
+      seo_card_vm:          'Convert Vimeo videos to MP3 or WAV audio files for offline listening.',
+      seo_card_tw2:         'Download the audio from any publicly posted Twitter/X video.',
+      seo_card_more_title:  '1000+ sites',
+      seo_card_more:        'Instagram, Facebook, Dailymotion, Reddit and over 1000 other platforms supported.',
+      seo_h2_3:             '// HOW IT WORKS',
+      step1_title:          'Copy the URL',
+      step1_desc:           'Go to YouTube, SoundCloud or any supported platform. Copy the URL of the video or track from the address bar.',
+      step2_title:          'Paste & convert',
+      step2_desc:           'Paste the URL into WaveConvert, choose your format (MP3, WAV, OGG, M4A) and start the conversion in one click.',
+      step3_title:          'Download',
+      step3_desc:           'Your file is ready in seconds. Click the download button and it\'s on your device.',
+      seo_h2_faq:           '// FAQ — FREQUENTLY ASKED QUESTIONS',
+      faq1_q:               'How do I convert YouTube to MP3 for free?',
+      faq1_a:               'Copy your YouTube video URL, paste it into WaveConvert, select MP3 and click "Start Conversion". The MP3 file downloads automatically — no sign-up, no software to install.',
+      faq2_q:               'What audio quality do the converted files have?',
+      faq2_a:               'WaveConvert extracts the best available audio stream from the source. For YouTube, this is typically 128–320 kbps depending on the original video. The WAV format provides the best lossless quality.',
+      faq3_q:               'Is there a duration or conversion limit?',
+      faq3_a:               'No. WaveConvert is completely free and unlimited. Convert as many videos as you like without creating an account.',
+      faq4_q:               'Is my data stored?',
+      faq4_a:               'No. Converted audio files are automatically deleted from our servers after 5 minutes. We do not store any personal data or conversion history.',
+      faq5_q:               'Does WaveConvert work on mobile?',
+      faq5_a:               'Yes, WaveConvert works on all devices — smartphone, tablet or computer — with no installation required. Simply open the site in your browser.',
+      // footer
+      footer_copy:          '© 2026 WAVECONVERT // POWERED BY REVOLUTION NETWORK',
+      footer_note:          '* Spotify: metadata only',
+      // error prefix
+      error_prefix:         'ERROR ::',
+    }
+  };
+
+  // ============================================================
+  // LANGUAGE DETECTION & APPLICATION
+  // ============================================================
+  let currentLang = 'fr';
+
+  function detectLang() {
+    const saved = localStorage.getItem('wc_lang');
+    if (saved && translations[saved]) return saved;
+    const browser = (navigator.language || navigator.userLanguage || 'fr').toLowerCase();
+    return browser.startsWith('fr') ? 'fr' : 'en';
+  }
+
+  function applyLang(lang) {
+    if (!translations[lang]) lang = 'fr';
+    currentLang = lang;
+    const t = translations[lang];
+
+    // <html lang>
+    document.documentElement.lang = lang;
+
+    // <title> & meta
+    document.title = t.page_title;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.content = t.page_desc;
+
+    // All data-i18n elements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (t[key] !== undefined) el.textContent = t[key];
+    });
+
+    // Placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.dataset.i18nPlaceholder;
+      if (t[key] !== undefined) el.placeholder = t[key];
+    });
+
+    // Lang toggle buttons
+    document.getElementById('btnLangFR').classList.toggle('active', lang === 'fr');
+    document.getElementById('btnLangEN').classList.toggle('active', lang === 'en');
+
+    // Persist
+    localStorage.setItem('wc_lang', lang);
+  }
+
+  function setLang(lang) {
+    applyLang(lang);
+  }
+
+  // ============================================================
+  // FILENAME HELPER
+  // ============================================================
+  function sanitizeFilename(name) {
+    return name
+      .replace(/[<>:"/\\|?*\x00-\x1F]/g, '')   // forbidden chars
+      .replace(/[\s]+/g, '_')                    // spaces → underscore
+      .replace(/\.+$/, '')                       // trailing dots
+      .slice(0, 120)                             // max length
+      .trim() || 'audio';
+  }
+
+  // ============================================================
+  // APP LOGIC
+  // ============================================================
   const API = 'https://api-convert.revolution-network.fr';
 
   const stepOrder = ['extract', 'convert', 'processing', 'ready'];
   const barPct    = { extract: 20, convert: 45, processing: 75, ready: 95 };
   let selectedFormat = 'mp3';
-  let infoTimer = null;
+  let infoTimer      = null;
+  let currentTitle   = '';   // ← stores track title for filename
 
   // Format selector
   document.querySelectorAll('.fmt').forEach(el => {
@@ -994,6 +1220,7 @@ footer {
   }
 
   function showPreview(d) {
+    currentTitle = d.title || '';   // ← save title for filename
     document.getElementById('previewThumb').src = d.thumbnail || '';
     document.getElementById('previewTitle').textContent = d.title;
     const dur = d.duration ? fmtDur(d.duration) : '';
@@ -1029,12 +1256,14 @@ footer {
     const url = document.getElementById('urlInput').value.trim();
     if (!url) { document.getElementById('urlInput').focus(); return; }
 
+    const t = translations[currentLang];
+
     // Reset UI
     document.getElementById('errPanel').classList.remove('show');
     document.getElementById('dlPanel').classList.remove('show');
     document.getElementById('btnReset').classList.remove('show');
     document.getElementById('btnConvert').disabled = true;
-    document.getElementById('btnConvert').textContent = '[ CONVERSION EN COURS... ]';
+    document.getElementById('btnConvert').textContent = t.btn_converting;
     document.getElementById('progressPanel').classList.add('show');
     document.getElementById('barFill').style.width = '5%';
     document.getElementById('barPct').textContent = '5%';
@@ -1073,6 +1302,7 @@ footer {
 
           if (event === 'status') {
             setStep(payload.step);
+
           } else if (event === 'done') {
             document.getElementById('barFill').style.width = '100%';
             document.getElementById('barPct').textContent = '100%';
@@ -1080,42 +1310,67 @@ footer {
               document.getElementById('s-'+s).classList.remove('active');
               document.getElementById('s-'+s).classList.add('done');
             });
-            const filename = payload.filename || `audio.${selectedFormat}`;
+
+            // ── FILENAME: use track title, fallback to server name, then "audio" ──
+            let filename;
+            if (payload.filename && !/^audio\./i.test(payload.filename)) {
+              // server sent a real name (not the generic "audio.xxx")
+              filename = payload.filename;
+            } else if (currentTitle) {
+              filename = sanitizeFilename(currentTitle) + '.' + selectedFormat;
+            } else {
+              filename = payload.filename || `audio.${selectedFormat}`;
+            }
+
             document.getElementById('dlFilename').textContent = filename;
             document.getElementById('btnDl').onclick = () => {
-              window.location.href = payload.downloadUrl;
+              // trigger download with correct filename via <a> trick
+              const a = document.createElement('a');
+              a.href = payload.downloadUrl;
+              a.download = filename;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
             };
             document.getElementById('dlPanel').classList.add('show');
             document.getElementById('btnReset').classList.add('show');
-            document.getElementById('btnConvert').textContent = '[ LANCER LA CONVERSION ]';
+            document.getElementById('btnConvert').textContent = t.btn_convert;
             document.getElementById('btnConvert').disabled = false;
+
           } else if (event === 'error') {
             throw new Error(payload.message);
           }
         }
       }
     } catch (err) {
-      document.getElementById('errPanel').textContent = 'ERROR :: ' + err.message;
+      const t2 = translations[currentLang];
+      document.getElementById('errPanel').textContent = (t2.error_prefix || 'ERROR ::') + ' ' + err.message;
       document.getElementById('errPanel').classList.add('show');
-      document.getElementById('btnConvert').textContent = '[ LANCER LA CONVERSION ]';
+      document.getElementById('btnConvert').textContent = t.btn_convert;
       document.getElementById('btnConvert').disabled = false;
       document.getElementById('btnReset').classList.add('show');
     }
   }
 
   document.getElementById('btnReset').addEventListener('click', () => {
+    currentTitle = '';
     document.getElementById('urlInput').value = '';
     document.getElementById('progressPanel').classList.remove('show');
     document.getElementById('dlPanel').classList.remove('show');
     document.getElementById('errPanel').classList.remove('show');
     document.getElementById('btnReset').classList.remove('show');
-    document.getElementById('btnConvert').textContent = '[ LANCER LA CONVERSION ]';
+    document.getElementById('btnConvert').textContent = translations[currentLang].btn_convert;
     document.getElementById('btnConvert').disabled = false;
     document.getElementById('barFill').style.width = '0';
     document.getElementById('barPct').textContent = '0%';
     hidePreview();
     stepOrder.forEach(s => document.getElementById('s-'+s).classList.remove('active','done'));
   });
+
+  // ============================================================
+  // INIT
+  // ============================================================
+  applyLang(detectLang());
 </script>
 </body>
 </html>
