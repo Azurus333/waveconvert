@@ -277,7 +277,7 @@
         const previewTitle = document.getElementById('previewTitle');
         const previewChannel = document.getElementById('previewChannel');
 
-        let eventSource = null;
+        let abortController = null;
 
         convertBtn.addEventListener('click', startConversion);
         urlInput.addEventListener('keypress', (e) => {
@@ -293,12 +293,18 @@
                 return;
             }
 
-            if (eventSource) eventSource.close();
+            // Annuler la requête précédente si elle existe
+            if (abortController) {
+                abortController.abort();
+            }
+
+            // Réinitialiser
             progressBar.style.width = '0%';
             preview.style.display = 'none';
             statusEl.textContent = '🔍 Vérification de l\'URL...';
 
             try {
+                // 1. Récupérer les infos de la vidéo
                 const infoResp = await fetch(`${API}/api/info`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -310,64 +316,96 @@
                 const info = await infoResp.json();
                 showPreview(info);
 
+                // 2. Démarrer la conversion via fetch + ReadableStream (pour contourner les problèmes CORS/SSE)
                 statusEl.textContent = '⚡ Conversion en cours...';
                 progressBar.style.width = '10%';
 
-                eventSource = new EventSource(`${API}/api/convert?url=${encodeURIComponent(url)}&format=${format}`);
-
-                eventSource.onmessage = (event) => {
-                    const data = JSON.parse(event.data);
-                    if (data.step === 'extract') {
-                        statusEl.textContent = '🎵 Extraction de l\'audio...';
-                        progressBar.style.width = '25%';
-                    } else if (data.step === 'convert') {
-                        statusEl.textContent = '🔄 Conversion en cours...';
-                        progressBar.style.width = '50%';
-                    } else if (data.step === 'processing') {
-                        statusEl.textContent = data.message || '⏳ Traitement par le réseau...';
-                        progressBar.style.width = '75%';
-                    } else if (data.step === 'ready') {
-                        statusEl.textContent = '✅ Prêt !';
-                        progressBar.style.width = '90%';
-                    }
-                };
-
-                eventSource.addEventListener('done', (event) => {
-                    if (event.data) {
-                        const data = JSON.parse(event.data);
-                        progressBar.style.width = '100%';
-                        statusEl.textContent = '✅ Téléchargement prêt !';
-
-                        // ⬇️⬇️⬇️ CORRECTION : FORCE LE TÉLÉCHARGEMENT ⬇️⬇️⬇️
-                        const a = document.createElement('a');
-                        a.href = data.downloadUrl;
-                        a.download = data.filename || `audio.${data.format}`;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-
-                        setTimeout(() => {
-                            progressBar.style.width = '0%';
-                            statusEl.textContent = 'Prêt pour une nouvelle conversion !';
-                        }, 3000);
-                    }
-                    if (eventSource) eventSource.close();
+                abortController = new AbortController();
+                const response = await fetch(`${API}/api/convert`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url, format }),
+                    signal: abortController.signal
                 });
 
-                eventSource.addEventListener('error', (event) => {
-                    if (event.data) {
-                        const data = JSON.parse(event.data);
-                        statusEl.textContent = `❌ Erreur : ${data.message || 'Conversion échouée'}`;
-                    } else {
-                        statusEl.textContent = '❌ Erreur de connexion';
+                if (!response.ok) throw new Error('Erreur lors de la conversion');
+                if (!response.body) throw new Error('Pas de flux de données');
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+
+                    // Traiter chaque événement SSE
+                    while (buffer.includes('\n\n')) {
+                        const endIndex = buffer.indexOf('\n\n');
+                        const event = buffer.substring(0, endIndex);
+                        buffer = buffer.substring(endIndex + 2);
+
+                        if (!event.trim()) continue;
+
+                        const lines = event.split('\n');
+                        let eventType = 'message';
+                        let eventData = '';
+
+                        for (const line of lines) {
+                            if (line.startsWith('event:')) {
+                                eventType = line.substring(6).trim();
+                            } else if (line.startsWith('data:')) {
+                                eventData = line.substring(5).trim();
+                            }
+                        }
+
+                        if (eventData) {
+                            try {
+                                const data = JSON.parse(eventData);
+                                if (eventType === 'status') {
+                                    statusEl.textContent = data.message || 'Traitement...';
+                                    if (data.step === 'extract') progressBar.style.width = '25%';
+                                    else if (data.step === 'convert') progressBar.style.width = '50%';
+                                    else if (data.step === 'processing') progressBar.style.width = '75%';
+                                    else if (data.step === 'ready') progressBar.style.width = '90%';
+                                } else if (eventType === 'done') {
+                                    progressBar.style.width = '100%';
+                                    statusEl.textContent = '✅ Téléchargement prêt !';
+
+                                    // FORCE LE TÉLÉCHARGEMENT
+                                    const a = document.createElement('a');
+                                    a.href = data.downloadUrl;
+                                    a.download = data.filename || `audio.${data.format}`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+
+                                    setTimeout(() => {
+                                        progressBar.style.width = '0%';
+                                        statusEl.textContent = 'Prêt pour une nouvelle conversion !';
+                                    }, 3000);
+                                    return;
+                                } else if (eventType === 'error') {
+                                    statusEl.textContent = `❌ Erreur : ${data.message || 'Conversion échouée'}`;
+                                    progressBar.style.width = '0%';
+                                    return;
+                                }
+                            } catch (e) {
+                                console.error('Erreur de parsing:', e);
+                            }
+                        }
                     }
-                    progressBar.style.width = '0%';
-                    if (eventSource) eventSource.close();
-                });
+                }
 
             } catch (error) {
-                statusEl.textContent = `❌ Erreur : ${error.message}`;
+                if (error.name !== 'AbortError') {
+                    statusEl.textContent = `❌ Erreur : ${error.message}`;
+                }
                 progressBar.style.width = '0%';
+            } finally {
+                abortController = null;
             }
         }
 
